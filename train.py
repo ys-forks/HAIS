@@ -175,8 +175,8 @@ if __name__ == '__main__':
     model_fn = model_fn_decorator()
 
     # dataset
-    if cfg.dataset == 'scannetv2':
-        if data_name == 'scannet':
+    if cfg.dataset == 'scannetv2' or cfg.dataset == 'multiscan':
+        if data_name == 'scannet' or data_name == 'multiscan':
             import data.scannetv2_inst
             dataset = data.scannetv2_inst.Dataset()
             if cfg.dist:
