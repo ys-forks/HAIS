@@ -280,7 +280,7 @@ class HAIS(nn.Module):
 
         if(epoch > self.prepare_epochs):
 
-            if self.cfg.dataset == 'scannetv2':
+            if self.cfg.dataset == 'scannetv2' or self.cfg.dataset == 'multiscan':
                 object_idxs = torch.nonzero(semantic_preds > 1).view(-1) # floor idx 0, wall idx 1
             else:
                 raise Exception
