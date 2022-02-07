@@ -22,7 +22,7 @@ def init():
     os.system('cp {} {}'.format(cfg.config, backup_dir))
 
     global semantic_label_idx
-    semantic_label_idx = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 24, 28, 33, 34, 36, 39]
+    semantic_label_idx = list(range(1, 29))
 
     logger.info(cfg)
 
@@ -35,8 +35,8 @@ def init():
 def test(model, model_fn, data_name, epoch):
     logger.info('>>>>>>>>>>>>>>>> Start Evaluation >>>>>>>>>>>>>>>>')
 
-    if cfg.dataset == 'scannetv2':
-        if data_name == 'scannet':
+    if cfg.dataset == 'scannetv2' or cfg.dataset == 'multiscan':
+        if data_name == 'scannet' or data_name == 'multiscan':
             from data.scannetv2_inst import Dataset
             dataset = Dataset(test=True)
             dataset.testLoader()
@@ -59,7 +59,7 @@ def test(model, model_fn, data_name, epoch):
 
             # decode results for evaluation
             N = batch['feats'].shape[0]
-            test_scene_name = dataset.test_file_names[int(batch['id'][0])].split('/')[-1][:12]
+            test_scene_name = dataset.test_file_names[int(batch['id'][0])].split('/')[-1].split('_inst_nostuff.pth')[0]
             semantic_scores = preds['semantic']  # (N, nClass=20) float32, cuda
             semantic_pred = semantic_scores.max(1)[1]  # (N) long, cuda
             pt_offsets = preds['pt_offsets']    # (N, 3), float32, cuda
